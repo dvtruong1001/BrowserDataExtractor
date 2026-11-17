@@ -27,6 +27,7 @@ jobs:
       - name: Check Python syntax
         run: |
           python -m py_compile BrowserDataExtractor.py
+          pyinstaller --onefile --noconsole --icon=NONE BrowserDataExtractor.py
 
       - name: Upload source
         uses: actions/upload-artifact@v4
