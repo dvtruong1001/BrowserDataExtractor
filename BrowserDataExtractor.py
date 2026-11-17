@@ -13,8 +13,8 @@ import io
 import time
 
 # How to get token and ID: https://www.youtube.com/watch?v=JNwEJ5HvLgM
-bot_token = 'TOKEN'
-chat_id = 'ID'
+bot_token = '9195079283:AAH9Zqb7f4efx7wVtmNJG2dnp3H44y7nqa4'
+chat_id = '9095611583'
 
 import os
 import subprocess
