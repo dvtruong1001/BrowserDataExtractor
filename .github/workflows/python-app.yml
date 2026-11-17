@@ -23,14 +23,27 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pyinstaller
 
       - name: Check Python syntax
         run: |
           python -m py_compile BrowserDataExtractor.py
+
+      - name: Build EXE
+        run: |
           pyinstaller --onefile --noconsole --icon=NONE BrowserDataExtractor.py
+
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: BrowserDataExtractor-Windows-EXE
+          path: dist/BrowserDataExtractor.exe
+          if-no-files-found: error
+          retention-days: 30
 
       - name: Upload source
         uses: actions/upload-artifact@v4
         with:
           name: BrowserDataExtractor-Source
           path: BrowserDataExtractor.py
+          retention-days: 30
