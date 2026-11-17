@@ -1,0 +1,8 @@
+requests
+psutil
+pycountry
+screeninfo
+pycryptodome
+winshell
+pypiwin32
+pyinstaller
